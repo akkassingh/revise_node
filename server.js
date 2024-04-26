@@ -1,6 +1,6 @@
-const { createServer } = require("http");
-const { createReadStream } = require("fs");
-const data = require("./sample_data.json");
+import {createServer} from "http";
+
+import data from './assets/sample_data.json' assert { type: "json" };
 
 
 createServer((req, res) => {

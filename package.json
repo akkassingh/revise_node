@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "timer":"node server --time 6"
   },
   "author": "",
   "license": "ISC",

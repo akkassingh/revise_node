@@ -1,14 +1,20 @@
-import {createServer} from "http";
+import parseArgs from "minimist";
+import Timer from "tiny-timer";
 
-import data from './assets/sample_data.json' assert { type: "json" };
+const { time } = parseArgs(process.argv);
 
+if(!time){
+    throw new Error ("--- time is required");
+}
 
-createServer((req, res) => {
-    res.writeHead(200, { "Content-Type": "text/json" });
-    if(req.url.toLocaleLowerCase() === "/sample") {
-        data.menu.id="samplefile";
-    }
-    res.end(JSON.stringify(data));
-}).listen(3000);
+if(!parseInt(time)){
+    throw new Error ("--- time must be a number");
+}
 
-console.log("Web server listening on port 3000");
+console.log(time);
+
+const timer = new Timer();
+timer.on("tick", () => console.log("tick"));
+timer.on("done", () => console.log("ticking is complete."));
+
+timer.start(time * 1000);

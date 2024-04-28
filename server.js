@@ -1,18 +1,59 @@
-import {createServer} from 'http';
-import { Server } from 'socket.io';
+import express from "express";
+import skiTerms from "./ski-terms.json" assert { type: "json" };
+import bodyParser from "body-parser";
+import fs from "fs";
 
-const server = createServer().listen(3000);
-const io = new Server(server);
+const app = express();
 
-io.on('connection', (socket) => {
-    console.log(`${io.engine.clientsCount} connections`);
-    socket.on('chat', (message) => {
-        console.log(`${socket.id}: ${message}`);
-        io.sockets.emit("message", message, socket.id);
-    });
-    socket.on("disconnect", () => {
-        console.log("disconnected", socket.id)
-    })
-})
+let definitions = skiTerms;
 
-console.log("socket sever running on port 3000");
+app.use("/", express.static("./client"));
+app.get("/dictionary", (req, res) => {
+  res.json(definitions);
+});
+
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+  console.log(`${req.method} request for ${req.url}`);
+  if (Object.keys(req.body).length) {
+    console.log(req.body);
+  }
+  next();
+});
+
+app.post("/dictionary", bodyParser.json(), (req, res) => {
+  definitions.push(req.body);
+  save();
+  res.json({
+    status: "success",
+    term: req.body
+  });
+});
+
+app.delete("/dictionary/:term", (req, res) => {
+  definitions = definitions.filter(
+    ({ term }) => term !== req.params.term
+  );
+  save();
+  res.json({
+    status: "success",
+    removed: req.params.term,
+    newLength: definitions.length
+  });
+});
+
+const save = () => {
+  fs.writeFile(
+    "./ski-terms.json",
+    JSON.stringify(definitions, null, 2),
+    (err) => {
+      if (err) {
+        throw err;
+      }
+    }
+  );
+};
+
+app.listen(3000, () =>
+  console.log("ski dictionary running at 3000")
+);

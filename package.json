@@ -5,15 +5,19 @@
   "type": "module",
   "scripts": {
     "start": "node server",
-    "server": "nodemon server",
-    "timer":"node server --time 6"
+    "dev-server": "nodemon server",
+    "timer": "node server --time 6"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
     "minimist": "^1.2.8",
-    "nodemon": "^3.1.0",
     "tiny-timer": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

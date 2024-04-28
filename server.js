@@ -10,6 +10,15 @@ app.get("/sample", (req, res) => {
     res.json(sample_data);
 })
 
+app.use(bodyParser.json());
+app.use((req, res, next) => {
+    console.log(`${req.method} request for ${req.url}`)
+    if(Object.keys(req.body).length){
+        console.log(req.body);
+    }
+    next();
+})
+
 app.post("/addsample", bodyParser.json(),(req, res) => {
     sample_data.menu.popup.menuitem.push(req.body)
     save();

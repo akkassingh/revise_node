@@ -15,6 +15,10 @@
         {
           "value": "Close",
           "onclick": "CloseDoc()"
+        },
+        {
+          "value": "tes2t",
+          "onclick": "CreateNewDoc()"
         }
       ]
     }
